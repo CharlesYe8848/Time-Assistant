@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>时间小助手</title>
+    <link rel="stylesheet" href="plugins/flatpickr.min.css">
+    <style>
+        .empty-data-message {
+            margin-top: 50px;
+        }
+        
+        .remaining-days {
+            color: rgb(0, 150, 136);
+            /* 设置剩余天数文本颜色 */
+        }
+        
+        .passed-days {
+            color: #a3aec0;
+            /* 设置已过天数文本颜色 */
+        }
+        
+        form {
+            padding-top: 10px;
+        }
+        
+        .show {
+            display: block !important;
+        }
+        /* 样式 */
+        
+        .settings-menu {
+            display: none;
+            position: absolute;
+            background-color: #ffffff;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            min-width: 100px;
+            left: 20px;
+            top: 32px;
+        }
+        
+        .export-btn:hover,
+        .import-btn:hover,
+        .version-menu-item:hover,
+        .update-info-menu-item:hover {
+            background-color: #f2f3f4;
+        }
+        
+        .settings-menu a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            /* text-align: center; */
+            text-align: left;
+            line-height: 18px;
+        }
+        /* 倒计时为 0 的时候特殊突出的卡片样式 */
+        
+        .urgent {
+            background-color: #fdebeb;
+            /* 使用不同的背景颜色 */
+            /* font-weight: bold; */
+            /* 加粗字体 */
+            color: #a93232;
+            /* 使用红色字体颜色 */
+            /* 添加任何其他你想要的样式 */
+        }
+        
+        a.delete-btn {
+            color: #e31e1e;
+        }
+        
+        a.delete-btn:hover {
+            background-color: #f2f3f4;
+        }
+        
+        .word {
+            font-size: 12px;
+            font-weight: normal;
+            color: #a3aec0;
+        }
+        
+        .menu-items {
+            /* display: none; */
+            /* 默认情况下隐藏菜单项 */
+            /* 添加其他样式，比如背景色、边框等 */
+            position: absolute;
+            background-color: #ffffff;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            min-width: 100px;
+            left: 254px;
+            margin-top: 0px;
+        }
+        
+        .menu-items a {
+            /* color: black; */
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            line-height: 18px;
+        }
+        
+        a {
+            background-color: initial;
+            cursor: pointer;
+            text-decoration: none;
+            outline: none;
+            transition: color 0.3s ease 0s;
+        }
+        
+        .more-menu {
+            /* display: none; */
+            /* 添加一些样式，比如菜单的位置、背景色等 */
+            /* position: absolute; */
+            top: 16px;
+            right: 0;
+            z-index: 1;
+        }
+        
+        .card:hover .more-menu {
+            display: block;
+        }
+        
+        .card:hover {
+            background-color: #f2f3f4;
+        }
+        
+        .day {
+            font-size: 16px;
+            font-weight: bold;
+            width: 60px;
+            /* 固定天数位置的宽度 */
+            text-align: right;
+            /* 将文本右对齐 */
+            /* margin-right: 20px; */
+            margin-left: 70px;
+        }
+        
+        .event {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .date {
+            font-size: 12px;
+            color: #a3aec0;
+            display: inline-block;
+            margin-right: 0px;
+            margin-top: 2px;
+        }
+        
+        .flatpickr-day {
+            height: 27px;
+            line-height: 27px;
+        }
+        
+        .flatpickr-current-month {
+            font-size: 100%;
+        }
+        
+        .flatpickr-calendar {
+            font-size: 12px;
+            border-radius: 0px;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            /* padding: 2px 10px; */
+            margin: 0px;
+            padding-bottom: 50px;
+            min-height: 180px;
+        }
+        /* 添加过渡动画 */
+        
+        .fade {
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+        
+        .fade.hide {
+            opacity: 0;
+        }
+        
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .main_content {
+            width: 370px;
+        }
+        
+        .text {
+            font-size: 14px;
+            display: inline-block;
+            /* 让div变成行内元素，使其文字水平排列 */
+            margin-right: 0px;
+            /* 可选的间距 */
+            width: 150px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        
+        #countdown,
+        #paydayCountdown,
+        #endOfWorkCountdown,
+        #hireDaysCount,
+        #babyAgeCount,
+        #birthdayCountdown,
+        #progress-text,
+        #year-progress-text,
+        #weekendCountdown,
+        #remainingLoanPeriod,
+        #retirementDaysCount {
+            font-size: 14px;
+            /* font-weight: bold; */
+            /* margin-top: 10px; */
+            margin: 0 4px;
+            /* color: #00c7f7; */
+        }
+        
+        .card {
+            cursor: pointer;
+            /* margin-left: 16px; */
+            /* margin-right: 16px; */
+            border-bottom: 1px solid #eaeaea;
+            /* 淡灰色的水平边框 */
+            /* margin-bottom: 5px; */
+            /* 为卡片底部添加一些空间 */
+            padding-bottom: 5px;
+            padding-top: 5px;
+            padding-left: 8px;
+            /* 为卡片内容底部添加一些空间 */
+            display: flex;
+            /* border-radius: 10px; */
+            overflow: hidden;
+            align-items: center;
+            /* 垂直居中 */
+            justify-content: center;
+            /* 水平居中 */
+            /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); */
+            /* cursor: pointer;
+            user-select: none; */
+            /* position: relative; */
+            /* 使得更多菜单的绝对定位相对于 card */
+        }
+        
+        .image {
+            /* flex: 1; */
+            width: 20px;
+            height: 20px;
+        }
+        
+        .content {
+            display: flex;
+            /* flex: 2; */
+            padding: 8px;
+            align-items: center;
+            text-align: left;
+            width: 300px;
+            flex-direction: row;
+            align-content: flex-start;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+        
+        img {
+            width: 85%;
+            height: auto;
+        }
+        
+        .emphasis {
+            font-weight: bold;
+            color: #00c7f7;
+            /* 这里可以调整数字的颜色 */
+        }
+        
+        .remind {
+            font-weight: bold;
+            color: #ebc445;
+            /* 这里可以调整数字的颜色 */
+        }
+        
+        .icon {
+            width: 20px;
+            /* 设置图标的宽度 */
+            height: 20px;
+            /* 设置图标的高度 */
+        }
+        /* 标题容器样式 */
+        
+        .title-container {
+            /* margin-bottom: 8px; */
+            padding: 12px;
+            position: relative;
+            display: block;
+            text-align: center;
+            /* 水平居中子元素 */
+            /* display: flex;
+            /* justify-content: center; */
+            /* justify-content: space-between;
+            align-items: center; */
+            border-bottom: solid 1px #eaeaea;
+        }
+        
+        .icon--plus,
+        .icon--check {
+            cursor: pointer;
+            float: right;
+            /* 使图标按钮浮动到左侧 */
+            margin-right: 8px;
+        }
+        
+        #title,
+        #add_title {
+            display: inline;
+            text-align: center;
+            /* 居中对齐 */
+            vertical-align: middle;
+            /* 垂直居中对齐 */
+            margin: 0;
+            /* 移除外边距 */
+            padding: 0;
+            /* 移除内边距 */
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .icon--settings,
+        .icon--back {
+            cursor: pointer;
+            float: left;
+            /* 使图标按钮浮动到左侧 */
+            margin-left: 8px;
+            /* --size: 10px;
+            position: relative; */
+        }
+        /* 样式表单容器 */
+        /* .form-container { */
+        /* background-color: #f9f9f9; */
+        /* padding: 16px; */
+        /* border-radius: 10px; */
+        /* } */
+        /* 设置表单字段样式 */
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        /* 设置字段名称右对齐 */
+        
+        .form-label {
+            text-align: right;
+            padding-right: 10px;
+            font-weight: bold;
+        }
+        /* 设置表单输入框样式 */
+        
+        .form-input {
+            width: calc(100% - 130px);
+            /* 调整宽度，留出空间给按钮 */
+            padding: 10px;
+            border: 1px solid #ccc;
+            /* border-radius: 5px; */
+            box-sizing: border-box;
+            /* 确保边框大小包含在输入框的宽度内 */
+        }
+        /* 设置提交按钮样式 */
+        
+        .submit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            float: right;
+            /* 让按钮靠右浮动 */
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="main_content">
+        <div id="contentList">
+            <header class="title-container">
+                <!-- 设置按钮 -->
+                <i id="settings-btn" class="icon icon--settings icon--btn">
+                    <svg t="1712323061358" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8582" width="20" height="20"><path d="M509.387755 666.122449c-83.591837 0-151.510204-67.918367-151.510204-151.510204s67.918367-151.510204 151.510204-151.510204 151.510204 67.918367 151.510204 151.510204-67.918367 151.510204-151.510204 151.510204z m0-261.22449c-60.604082 0-109.714286 49.110204-109.714286 109.714286s49.110204 109.714286 109.714286 109.714286 109.714286-49.110204 109.714286-109.714286-49.110204-109.714286-109.714286-109.714286z" fill="#333333" p-id="8583"></path><path d="M556.408163 929.959184h-83.591836c-47.542857 0-86.204082-38.661224-86.204082-86.204082v-22.987755c0-1.044898-0.522449-2.089796-1.567347-2.612245h-0.522449c-1.044898-0.522449-2.089796 0-3.134694 0.522449l-14.628571 15.15102c-16.195918 16.195918-37.093878 25.077551-59.559184 25.077551-22.465306 0-43.363265-8.881633-59.036735-24.555102l-59.036734-59.036734c-32.391837-32.391837-32.391837-85.159184 0-118.07347l15.673469-15.15102c1.044898-1.044898 1.044898-2.089796 0.522449-3.134694v-0.522449c-0.522449-1.044898-1.567347-1.567347-2.612245-1.567347h-22.987755c-47.542857 0-86.204082-38.661224-86.204082-86.204082v-78.367346c0.522449-47.020408 39.183673-85.681633 86.726531-85.681633h21.420408c1.044898 0 2.089796-0.522449 2.612245-2.089796 0.522449-1.044898 1.044898-2.612245 1.567347-3.657143 0.522449-1.044898 0-2.089796-0.522449-3.134694l-16.195918-16.718367C156.734694 329.142857 156.734694 275.853061 189.126531 243.461224l59.036734-59.036734c15.673469-15.673469 36.571429-24.555102 59.036735-24.555102 22.465306 0 43.363265 8.881633 59.036735 24.555102l15.15102 15.673469c0.522449 1.044898 2.089796 1.044898 3.134694 0.522449h0.522449c1.044898-0.522449 1.567347-1.567347 1.567347-2.612245v-17.763265C386.612245 132.702041 425.273469 94.040816 472.816327 94.040816h83.591836c44.408163 0 80.979592 36.571429 80.979592 80.979592v21.420408c0 1.044898 0.522449 2.089796 2.089796 2.612245 1.567347 0.522449 2.612245 1.044898 3.657143 1.567347 1.044898 0.522449 2.089796 0 3.134694-0.522449l16.718367-16.195918c32.391837-32.391837 85.159184-32.391837 118.073469 0.522449l59.036735 59.036734c15.673469 15.673469 24.555102 36.571429 24.555102 59.036735 0 22.465306-8.881633 43.363265-24.555102 59.036735l-15.673469 16.195918c-0.522449 0.522449-1.044898 2.089796-0.522449 2.612245 0.522449 1.044898 1.044898 2.612245 1.567347 3.657143 0.522449 1.044898 1.567347 2.089796 2.612245 2.089796h21.420408c44.408163 0 80.979592 36.571429 80.979592 80.979592v88.816326c0 44.408163-36.571429 80.979592-80.979592 80.979592h-22.987755c-1.044898 0-2.089796 0.522449-2.612245 1.567347-0.522449 1.567347-0.522449 2.612245 0.522449 3.657143l15.15102 14.628571c16.195918 16.195918 25.077551 37.093878 24.555102 59.559184 0 22.465306-8.881633 43.363265-24.555102 59.036735l-59.036734 59.036734c-15.673469 15.673469-36.571429 24.555102-59.036735 24.555102s-43.363265-8.881633-59.036735-24.555102l-16.195918-15.673469c-0.522449-0.522449-2.089796-1.044898-2.612245-0.522449-1.044898 0.522449-2.612245 1.044898-3.657143 1.567347-1.044898 0.522449-2.089796 1.567347-2.089796 2.612245v26.644898C637.387755 893.387755 600.816327 929.959184 556.408163 929.959184zM402.285714 780.538776c16.195918 7.314286 26.122449 22.987755 26.122449 40.75102v22.987755c0 24.555102 19.853061 44.408163 44.408164 44.408163h83.591836c21.420408 0 39.183673-17.763265 39.183674-39.183673v-26.644898c0-18.285714 10.971429-34.481633 28.212245-41.27347 1.044898-0.522449 1.567347-0.522449 2.612245-1.044897 16.718367-7.314286 35.526531-3.657143 48.587755 8.881632l16.195918 15.67347c16.718367 16.718367 43.363265 16.718367 59.559184 0l59.036734-59.036735c7.836735-7.836735 12.016327-18.285714 12.016327-29.779592 0-10.971429-4.179592-21.420408-12.016327-29.779592l-14.628571-14.106122c-13.583673-13.061224-17.763265-32.914286-9.926531-50.155102v-0.522449c6.791837-15.673469 22.987755-26.122449 40.751021-26.122449h22.987755c21.420408 0 39.183673-17.763265 39.183673-39.183674v-88.816326c0-21.420408-17.763265-39.183673-39.183673-39.183674h-21.420408c-18.285714 0-34.481633-10.971429-41.27347-28.212245-0.522449-1.044898-0.522449-1.567347-1.044898-2.612245-7.314286-16.718367-3.657143-35.526531 8.881633-48.587755l15.673469-16.195918c7.836735-7.836735 12.538776-18.808163 12.538776-29.779592 0-11.493878-4.179592-21.942857-12.016327-29.779592L751.281633 214.204082c-16.195918-16.195918-42.840816-16.195918-59.036735 0l-17.240816 16.195918c-13.061224 12.538776-32.391837 15.673469-48.587755 8.881633-0.522449-0.522449-1.567347-0.522449-2.612245-1.044898-17.240816-6.791837-28.212245-22.987755-28.212245-41.27347v-21.420408c0-21.420408-17.763265-39.183673-39.183674-39.183673h-83.591836c-24.555102 0-44.408163 19.853061-44.408164 44.408163V198.530612c0 17.763265-10.44898 33.436735-26.644898 40.751021-17.240816 7.836735-37.093878 3.657143-50.155102-9.404082l-15.15102-15.673469c-7.836735-7.836735-18.285714-12.016327-29.257143-12.016327-10.971429 0-21.420408 4.179592-29.257143 12.016327L218.906122 272.718367c-16.195918 16.195918-16.195918 42.840816 0 59.036735l16.195919 17.240816c12.538776 13.061224 16.195918 32.391837 8.881632 48.587755-0.522449 0.522449-0.522449 1.567347-1.044897 2.612245-6.791837 17.240816-22.987755 28.212245-41.27347 28.212245h-21.420408c-24.555102 0-44.408163 19.853061-44.408163 44.408164v78.367346c0 24.555102 19.853061 44.408163 44.408163 44.408164h22.987755c17.763265 0 33.436735 10.44898 40.75102 26.644898v0.522449c7.314286 16.718367 3.657143 37.093878-9.404081 49.632653l-15.67347 15.15102c-16.195918 16.195918-16.195918 42.318367 0 58.514286l59.036735 59.036735c7.836735 7.836735 18.285714 12.016327 29.257143 12.016326 10.971429 0 21.420408-4.179592 29.779592-12.538775l14.106122-14.628572c13.061224-13.583673 32.914286-17.763265 50.155102-9.92653l1.044898 0.522449z" fill="#333333" p-id="8584"></path></svg>
+                </i>
+                <!-- 标题 -->
+                <h1 id="title" style="text-align: center; font-size:15px;font-weight: normal;">时间助手</h1>
+                <!-- 添加按钮 -->
+                <i id="add-btn" class="icon icon--plus icon--btn">
+                    <svg t="1712243987179" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4264" width="20" height="20"><path d="M912 472H552V112h-80v360H112v80h360v360h80V552h360z" p-id="4265"></path></svg>
+                </i>
+            </header>
+            <div id="cardList">
+
+            </div>
+        </div>
+        <!-- 添加按钮被点击后隐藏卡片，并显示表单 -->
+        <div id="add-form" class="form-container hidden">
+            <div id="contentList">
+                <header class="title-container">
+                    <!-- 返回按钮 -->
+                    <i id="back-btn" class="icon icon--back icon--btn">
+                        <svg t="1712585856969" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="8053" width="20" height="20"><path d="M670.6 861.6c-7.6 0-15.1-2.9-20.9-8.6L329.4 532.7c-11.6-11.5-11.6-30.3 0-41.8l320.2-320.2c5.8-5.8 13.3-8.6 20.9-8.6 7.5 0 15.1 2.9 20.9 8.6 11.5 11.5 11.5 30.2 0 41.8L392 511.8l299.4 299.4c11.5 11.6 11.5 30.3 0 41.8-5.7 5.7-13.3 8.6-20.8 8.6z" fill="#515151" p-id="8054"></path></svg>
+                    </i>
+                    <!-- 标题 -->
+                    <h1 id="add_title" style="text-align: center; font-size:15px;font-weight: normal;">添加事件</h1>
+                    <!-- 确认按钮 -->
+                    <i id="check-btn" class="icon icon--check icon--btn">
+                        <svg t="1712627399125" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9197" width="20" height="20"><path d="M145.557333 501.632l241.365334 241.365333a10.666667 10.666667 0 0 0 15.082666 0L884.693333 260.288a32 32 0 0 1 45.248 45.226667L447.253333 788.266667a74.666667 74.666667 0 0 1-105.6 0L100.309333 546.901333a32 32 0 0 1 45.226667-45.269333z" fill="#515151" p-id="9198"></path></svg>
+                    </i>
+                </header>
+                <form>
+                    <div class="form-group">
+                        <label for="event-name" class="form-label">事件名称:</label>
+                        <input type="text" id="event-name" name="event-name" class="form-input" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label for="event-date" class="form-label">事件日期:</label>
+                        <!-- 将原生的日期输入框替换为 Flatpickr -->
+                        <input type="text" id="event-date" name="event-date" class="form-input small-flatpickr" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="icon-svg" class="form-label">SVG图标:</label>
+                        <textarea id="icon-svg" class="form-input" rows="4" autocomplete="off"></textarea>
+                        <div id="icon-preview" class="icon-preview"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="repeat" class="form-label">是否重复:</label>
+                        <select id="repeat" name="repeat" class="form-input">
+                    <option value="none">不重复</option>
+                    <!-- <option value="daily">每天</option>
+                    <option value="weekly">每周</option>
+                    <option value="monthly">每月</option>
+                    <option value="yearly">每年</option> -->
+                </select>
+                    </div>
+                    <!-- 添加其他表单字段 -->
+                    <!-- <button type="submit" class="submit-btn">提交</button> -->
+                </form>
+            </div>
+        </div>
+
+    </main>
+    <!-- 设置菜单 -->
+    <div id="settings-menu" class="settings-menu hidden">
+        <a id="export-btn" class="export-btn" href="#">导出事件</a>
+        <a id="import-btn" class="import-btn" href="#">导入事件</a>
+    </div>
+
+
+    <!-- <script src="popup.js"></script> -->
+    <!-- <script src="plugins/lunarFun.min.js"></script> -->
+    <script src="plugins/flatpickr.js"></script>
+    <script src="plugins/zh.js"></script>
+    <script src="plugins/add.min.js"></script>
+    <!-- <script>
+        var eventDate = document.getElementById("event-date");
+        // 初始化 Flatpickr，指定语言为中文
+        flatpickr(eventDate, {
+            enableTime: false, // 是否显示时间选择
+            dateFormat: "Y-m-d", // 日期格式
+            locale: "zh", // 指定语言为中文
+            static: false
+        });
+    </script> -->
+    <style>
+        .progress-container {
+            position: relative;
+            width: 20px;
+            height: 20px;
+            margin: 1px auto;
+        }
+        
+        .progress-circle {
+            fill: none;
+            stroke: #ddd;
+            stroke-width: 1;
+        }
+        
+        .progress-bar,
+        .progress-bar2 {
+            fill: none;
+            stroke: #007bff;
+            stroke-width: 1;
+            stroke-linecap: round;
+            stroke-dasharray: 0;
+            transition: stroke-dasharray 0.5s;
+            transform-origin: center;
+        }
+        
+        .progress-text,
+        .progress-text2 {
+            fill: #333;
+            font-family: Arial, sans-serif;
+            font-size: 7px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .rotate {
+            transform: rotate(-90deg);
+        }
+    </style>
+</body>
+
+</html>
