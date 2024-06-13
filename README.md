@@ -22,4 +22,4 @@ Google 浏览器插件，管理人生重要的时刻
 
 于是希望有个小工具，可以帮我记录下这些时间。虽然市面上有不少类似的工具，但是用下来总归不满意，要么广告多，要么用起来不顺手，我的需求很简单，只需要一个汇总的地方可以看就行。所以就有了这个“时间助手”小工具的诞生。
 
-https://mp.weixin.qq.com/s/i8N3OK3ojvgOuxQHoKWPWQ
+详细说明见：https://mp.weixin.qq.com/s/i8N3OK3ojvgOuxQHoKWPWQ
