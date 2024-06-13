@@ -7,6 +7,11 @@ Google 浏览器插件，管理人生重要的时刻
 添加事件
 浏览器本地存储
 
+# 如何使用
+1、进入 [**releases**](https://github.com/CharlesYe8848/Time-Assistant/releases) 页面，下载 Time-Assistant.zip 文件，并解压
+2、chrome浏览器打开开发者模式
+3、加载解压的文件夹
+
 # 背景
 宝宝出生后，有不少值得记录的日子，如宝宝出生时间、下次接种疫苗的时间、宝宝第一次翻身的日子。
 
