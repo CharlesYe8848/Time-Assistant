@@ -5,11 +5,14 @@ Google 浏览器插件，管理人生重要的时刻
 
 # 功能
 添加事件
+
 浏览器本地存储
 
 # 如何使用
 1、进入 [**releases**](https://github.com/CharlesYe8848/Time-Assistant/releases) 页面，下载 Time-Assistant.zip 文件，并解压
+
 2、chrome浏览器打开开发者模式
+
 3、加载解压的文件夹
 
 # 背景
