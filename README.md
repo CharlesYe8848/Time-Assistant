@@ -1,5 +1,5 @@
 # 时间助手
-Google 浏览器插件，管理人生重要的时刻
+Google 浏览器插件，管理人生重要的时刻，固定在浏览器工具栏中，点开即可使用
 
 ![image](https://github.com/CharlesYe8848/Time-Assistant/assets/26808857/023f4da2-99e8-45df-9039-187a20e63309)
 
