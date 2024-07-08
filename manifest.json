@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "时间助手",
-    "version": "0.10.12",
+    "version": "0.10.13",
     "description": "记住那些人生重要的时刻",
     "content_scripts": [{
         "matches": ["<all_urls>"],
