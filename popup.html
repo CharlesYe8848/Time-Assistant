@@ -7,6 +7,7 @@
     <title>时间小助手</title>
     <link rel="stylesheet" href="plugins/flatpickr.min.css">
     <link rel="stylesheet" href="plugins/styles.min.css">
+    <link rel="stylesheet" href="plugins/tags.min.css">
     <style>
         .empty-data-message {
             margin-top: 50px;
@@ -45,7 +46,9 @@
         .export-btn:hover,
         .import-btn:hover,
         .version-menu-item:hover,
-        .update-info-menu-item:hover {
+        .update-info-menu-item:hover,
+        .github-menu-item:hover,
+        .dayType:hover {
             background-color: #f2f3f4;
         }
         
@@ -131,13 +134,16 @@
         }
         
         .day {
-            font-size: 16px;
+            /* font-size: 16px; */
+            font-size: 13px;
             font-weight: bold;
-            width: 60px;
+            /* width: 60px; */
+            width: 104px;
             /* 固定天数位置的宽度 */
             text-align: right;
             /* 将文本右对齐 */
-            margin-right: 10px;
+            margin-right: -2px;
+            /* margin-right: 10px; */
             /* margin-left: 70px; */
             /* margin-left: 30px; */
         }
@@ -196,7 +202,8 @@
         }
         
         .main_content {
-            width: 370px;
+            /* width: 370px; */
+            width: 375px;
         }
         
         .text {
@@ -267,7 +274,8 @@
             padding: 8px;
             align-items: center;
             text-align: left;
-            width: 300px;
+            /* width: 300px; */
+            width: 316px;
             flex-direction: row;
             align-content: flex-start;
             flex-wrap: wrap;
@@ -361,13 +369,18 @@
         
         .form-group {
             margin-bottom: 20px;
+            display: flex;
+            align-items: center;
         }
         /* 设置字段名称右对齐 */
         
         .form-label {
-            text-align: right;
+            /* text-align: right;
             padding-right: 10px;
-            font-weight: bold;
+            font-weight: bold; */
+            flex: 0 0 78px;
+            text-align: right;
+            margin-right: 10px;
         }
         /* 设置表单输入框样式 */
         
@@ -411,9 +424,46 @@
                     <svg t="1712243987179" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4264" width="20" height="20"><path d="M912 472H552V112h-80v360H112v80h360v360h80V552h360z" p-id="4265"></path></svg>
                 </i>
             </header>
+            <div class="tags-container">
+                <div class="tags-wrapper" id="tags-wrapper">
+                    <!-- <div class="tag selected">推荐</div>
+                    <div class="tag unselected">全部</div>
+                    <div class="tag unselected">淘淘</div>
+                    <div class="tag unselected">生日</div>
+                    <div class="tag unselected">待办</div>
+                    <div class="tag unselected">倒计时</div>
+                    <div class="tag unselected">节假日</div>
+                    <div class="tag unselected">纪念日</div>
+                    <div class="tag unselected">进度</div>
+                    <div class="tag unselected">Tag 5</div>
+                    <div class="tag unselected">Tag 6</div>
+                    <div class="tag unselected">Tag 7</div> -->
+                </div>
+                <!-- <div class="tag unselected">Tag 2</div> -->
+                <div class="menu-icon">
+                    <svg t="1722243715298" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5034" width="16" height="16"><path d="M55.466667 123.733333h917.333333v42.666667H55.466667zM55.466667 490.666667h917.333333v42.666666H55.466667zM55.466667 857.6h917.333333v42.666667H55.466667z" fill="#2c2c2c" p-id="5035"></path></svg>
+                </div>
+                <!-- Example menu icon -->
+            </div>
+
             <div id="cardList">
 
             </div>
+
+            <!-- Tag Management Modal -->
+            <div id="tagManagementModal" class="modal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span class="close" onclick="closeModal()"><svg t="1722248891297" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4288" width="32" height="32"><path d="M512 466.944l233.472-233.472a31.744 31.744 0 0 1 45.056 45.056L557.056 512l233.472 233.472a31.744 31.744 0 0 1-45.056 45.056L512 557.056l-233.472 233.472a31.744 31.744 0 0 1-45.056-45.056L466.944 512 233.472 278.528a31.744 31.744 0 0 1 45.056-45.056z" fill="#5A5A68" p-id="4289"></path></svg></span>
+                        <h2 class="tags-title">标签管理</h2>
+                    </div>
+                    <div class="tags-list">
+                        <!-- Tags will be dynamically added here -->
+                    </div>
+                    <button class="add-tag-button" onclick="addNewTag()">新增标签</button>
+                </div>
+            </div>
+
         </div>
         <!-- 添加按钮被点击后隐藏卡片，并显示表单 -->
         <div id="add-form" class="form-container hidden">
@@ -455,26 +505,47 @@
                     <option value="yearly">每年</option> -->
                 </select>
                     </div>
+                    <div class="form-group">
+                        <label for="tags" class="form-label">标签:</label>
+                        <div class="dropdown-container">
+                            <div class="dropdown-input-container" id="dropdownInputContainer">
+                                <input type="text" class="dropdown-input" id="dropdownInput" placeholder="搜索或添加标签" autocomplete="off">
+                            </div>
+                            <div class="dropdown-options" id="dropdownOptions"></div>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group">
+                        <label for="tags" class="form-label">标签:</label>
+                        <select id="tags" name="tags" class="form-input" multiple></select>
+                    </div> -->
                     <!-- 添加其他表单字段 -->
                     <!-- <button type="submit" class="submit-btn">提交</button> -->
+
                 </form>
             </div>
         </div>
+        <div id="tip-message" class="tip-message">标签已存在，请重新填写</div>
 
     </main>
     <!-- 设置菜单 -->
     <div id="settings-menu" class="settings-menu hidden">
         <a id="export-btn" class="export-btn" href="#">导出事件</a>
         <a id="import-btn" class="import-btn" href="#">导入事件</a>
+        <a class="center-align dayType"><span class="switch-label">年月天显示</span><label class="switch">
+            <input type="checkbox" id="showFullDateDifference">
+            <span class="slider round"></span>
+        </label></a>
     </div>
-
 
     <!-- <script src="popup.js"></script> -->
     <!-- <script src="plugins/lunarFun.min.js"></script> -->
+    <script src="plugins/jquery-3.7.1.min.js"></script>
     <script src="plugins/lunar.min.js"></script>
     <script src="plugins/flatpickr.js"></script>
     <script src="plugins/zh.js"></script>
     <script src="plugins/add.min.js"></script>
+    <script src="plugins/tags.min.js"></script>
+    <!-- <script src="plugins/tags_input.js"></script> -->
     <!-- <script>
         var eventDate = document.getElementById("event-date");
         // 初始化 Flatpickr，指定语言为中文
@@ -527,6 +598,7 @@
             transform: rotate(-90deg);
         }
     </style>
+    </div>
 </body>
 
 </html>
