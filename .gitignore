@@ -1,4 +1,6 @@
 # 忽略plugins目录下的add.js、
 plugins/add.js
 plugins/styles.css
+plugins/tags.js
+plugins/tags.css
 .DS_Store
