@@ -6,8 +6,8 @@
     "content_scripts": [{
         "matches": ["<all_urls>"],
         "js": [
-            "plugins/tags.js",
-            "plugins/add.js",
+            "plugins/tags.min.js",
+            "plugins/add.min.js",
             "plugins/flatpickr.js",
             "plugins/jquery-3.7.1.min.js"
         ],
